@@ -1,8 +1,17 @@
 package com.example.guestbook.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.dto.PageRequestDTO;
+import com.example.guestbook.dto.PageResponseDTO;
 import com.example.guestbook.entity.Guestbook;
 import com.example.guestbook.repository.GuestbookRepository;
 
@@ -28,6 +37,23 @@ public class GuestbookServiceImpl implements GuestbookService {
         log.info("registered -> " + result);
 
         return result.getGno();
+
+    }
+
+    @Override
+    public PageResponseDTO<GuestbookDTO, Guestbook> list(PageRequestDTO pageRequestDTO) {
+        
+        log.info("get guestbook list");
+
+        Sort sort = Sort.by("gno").descending();
+
+        Pageable pageable = pageRequestDTO.getPageable(sort);
+        
+        Page<Guestbook> findAllResult = guestbookRepository.findAll(pageable);
+
+        Function<Guestbook, GuestbookDTO> fn = guestbook -> entityToDto(guestbook);
+
+        return new PageResponseDTO<>(findAllResult, fn);
 
     }
 }

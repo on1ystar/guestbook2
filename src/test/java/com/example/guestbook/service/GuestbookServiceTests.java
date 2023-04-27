@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.dto.PageRequestDTO;
+import com.example.guestbook.dto.PageResponseDTO;
 import com.example.guestbook.entity.Guestbook;
 import com.example.guestbook.repository.GuestbookRepository;
 
@@ -47,5 +49,30 @@ public class GuestbookServiceTests {
         Assertions.assertThat(guestbook.getTitle()).isEqualTo(title);
         Assertions.assertThat(guestbook.getContent()).isEqualTo(content);
         Assertions.assertThat(guestbook.getWriter()).isEqualTo(writer);
+    }
+
+    @Test
+    public void listTest() {
+
+        // Given
+        int page = 10;
+        int size = 10;
+        int startPage = 1;
+        int endPage = startPage + size - 1;
+        PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size);
+
+        // When
+        PageResponseDTO<GuestbookDTO, Guestbook> pageResponseDTO = guestbookService.list(pageRequestDTO);
+
+        // Then
+        System.out.println(pageResponseDTO);
+        Assertions.assertThat(pageResponseDTO.getDtoList().stream().findAny().get()).isInstanceOf(GuestbookDTO.class);
+        Assertions.assertThat(pageResponseDTO.getPage()).isEqualTo(page);
+        Assertions.assertThat(pageResponseDTO.getStart()).isEqualTo(startPage);
+        Assertions.assertThat(pageResponseDTO.getEnd()).isEqualTo(endPage);
+        Assertions.assertThat(pageResponseDTO.isPrev()).isEqualTo(false);
+        Assertions.assertThat(pageResponseDTO.isNext()).isEqualTo(true);
+        Assertions.assertThat(pageResponseDTO.getPageList().size()).isEqualTo(size);
+
     }
 }

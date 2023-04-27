@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.dto.PageRequestDTO;
+import com.example.guestbook.dto.PageResponseDTO;
+import com.example.guestbook.entity.Guestbook;
 import com.example.guestbook.service.GuestbookService;
 
 import lombok.extern.log4j.Log4j2;
@@ -32,9 +35,11 @@ public class GuestbookController {
     }
 
     @GetMapping("/list")
-    public void list() {
+    public void list(PageRequestDTO pageRequestDTO, Model model) {
 
         log.info("GET request : /guestbook/list");
+
+        model.addAttribute("pageResponseDTO", guestbookService.list(pageRequestDTO));
 
     }
 

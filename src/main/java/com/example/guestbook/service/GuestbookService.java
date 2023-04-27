@@ -9,7 +9,7 @@ public interface GuestbookService {
     
     Long register(GuestbookDTO guestbookDTO);
 
-    PageResponseDTO list(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<GuestbookDTO, Guestbook> list(PageRequestDTO pageRequestDTO);
 
     default Guestbook dtoToEntity(GuestbookDTO guestbookDTO) {
         

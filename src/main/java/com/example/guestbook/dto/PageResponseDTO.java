@@ -3,6 +3,7 @@ package com.example.guestbook.dto;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,18 @@ public class PageResponseDTO<DTO, EN> {
         this.dtoList = pageList.stream().map(fn).collect(Collectors.toList());
 
         Pageable pageable = pageList.getPageable();
-
-        this.page = pageable.getPageNumber();
-        this.start = page - (page % pageable.getPageSize()) + 1;
-        this.end = this.start + pageable.getPageSize() - 1;  // 다시 계산
+        int totalPages = pageList.getTotalPages();
+        int pageSize = pageable.getPageSize();
+        
+        this.page = pageable.getPageNumber() + 1;
+        
+        int tempEnd = (int)(Math.ceil(this.page / (double)pageSize)) * pageSize;
+        
+        this.start = tempEnd - pageSize + 1;
+        this.end = tempEnd < totalPages ? tempEnd : totalPages;
+        this.prev = this.start != 1;
+        this.next = this.end != totalPages;
+        this.pageList = IntStream.rangeClosed(this.start, this.end).boxed().collect(Collectors.toList());
     }
 
 }

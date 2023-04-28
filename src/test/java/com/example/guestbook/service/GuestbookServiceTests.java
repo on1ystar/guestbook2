@@ -75,4 +75,18 @@ public class GuestbookServiceTests {
         Assertions.assertThat(pageResponseDTO.getPageList().size()).isEqualTo(size);
 
     }
+
+    @Test
+    public void readTest() {
+
+        // Given
+        Long gno = 313L;
+
+        // When
+        GuestbookDTO guestbookDTO = guestbookService.read(gno);
+
+        // Then
+        Assertions.assertThat(guestbookDTO.getGno()).isEqualTo(gno);
+
+    }
 }

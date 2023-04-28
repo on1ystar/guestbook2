@@ -1,4 +1,4 @@
-package com.example.guestbook.repository;
+ package com.example.guestbook.repository;
 
 import java.util.List;
 import java.util.stream.IntStream;

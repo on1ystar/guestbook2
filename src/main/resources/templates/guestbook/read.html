@@ -40,7 +40,11 @@
         <br>
 
         <a th:href="@{/guestbook/list(page=${pageRequestDTO.page})}" style="text-decoration: none;">
-            <button type="button" class="btn btn-primary">List</button>
+            <button type="button" class="btn btn-info">List</button>
+        </a>
+
+        <a th:href="@{/guestbook/update(gno = ${guestbookDTO.gno})}" style="text-decoration: none;">
+            <button type="button" class="btn btn-primary">Update</button>
         </a>
 
     </th:block>

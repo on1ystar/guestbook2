@@ -14,6 +14,7 @@ import com.example.guestbook.dto.PageResponseDTO;
 import com.example.guestbook.entity.Guestbook;
 import com.example.guestbook.service.GuestbookService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
@@ -65,12 +66,29 @@ public class GuestbookController {
         return "redirect:/guestbook/list";
     }
 
-    @GetMapping("/read")
-    public void read(Long gno, @ModelAttribute("pageRequestDTO") PageRequestDTO dto, Model model) {
+    @GetMapping({"/read", "/update"})
+    public void read(HttpServletRequest request, Long gno, @ModelAttribute("pageRequestDTO") PageRequestDTO dto, Model model) {
 
-        log.info("GET request : /guestbook/read");
+        String url = request.getRequestURI().contains("read") ? "read" : "update";
+
+        log.info("GET request : /guestbook/" + url);
 
         model.addAttribute("guestbookDTO", guestbookService.read(gno));
 
     }
+
+    @PostMapping("/update")
+    public String update(GuestbookDTO guestbookDTO, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+
+        log.info("POST request : /guestbook/update");
+
+        guestbookService.update(guestbookDTO);
+
+        redirectAttributes.addAttribute("gno", guestbookDTO.getGno());
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+
+        return "redirect:/guestbook/read";
+
+    }
+
 }

@@ -10,8 +10,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.guestbook.dto.GuestbookDTO;
 import com.example.guestbook.dto.PageRequestDTO;
-import com.example.guestbook.dto.PageResponseDTO;
-import com.example.guestbook.entity.Guestbook;
 import com.example.guestbook.service.GuestbookService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -88,7 +86,20 @@ public class GuestbookController {
         redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
 
         return "redirect:/guestbook/read";
+    }
 
+    @PostMapping("/remove")
+    public String remove(Long gno, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+
+        log.info("POST request : /guestbook/remove");
+
+        guestbookService.remove(gno);
+
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+
+        redirectAttributes.addFlashAttribute("msg", "removed " + gno);
+
+        return "redirect:/guestbook/list";
     }
 
 }

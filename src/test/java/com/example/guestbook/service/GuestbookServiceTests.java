@@ -89,4 +89,42 @@ public class GuestbookServiceTests {
         Assertions.assertThat(guestbookDTO.getGno()).isEqualTo(gno);
 
     }
+
+    @Test
+    public void updateTest() {
+
+        // Given
+        Long gno = 313L;
+        String title = "Updated";
+        String content = "Updated";
+        GuestbookDTO guestbookDTO = GuestbookDTO.builder()
+            .gno(gno)
+            .title(title)
+            .content(content)
+            .build();
+
+        // When
+        guestbookService.update(guestbookDTO);
+
+        // Then
+        guestbookRepository.findById(gno).ifPresent((guestbook) -> {
+            Assertions.assertThat(guestbook.getTitle()).isEqualTo(title);
+            Assertions.assertThat(guestbook.getContent()).isEqualTo(content);
+            Assertions.assertThat(guestbook.getModDate()).isAfter(guestbook.getRegDate());
+        });
+
+    }
+
+    @Test
+    public void removeTest() {
+
+        // Given
+        Long gno = 313L;
+
+        // When
+        guestbookService.remove(gno);
+
+        // Then
+        Assertions.assertThat(guestbookRepository.findById(gno).isEmpty()).isTrue();
+    }
 }

@@ -7,10 +7,16 @@
 
         <h1 class="mt-4">GuestBook Read Page</h1>
 
-        <div class="form-group">
-            <label>Gno</label>
-            <input type="text" class="form-control" name="gno" th:value="${guestbookDTO.gno}" readonly>
-        </div>
+        <form action="/guestbook/delete" method="post" id="deleteForm">
+        
+            <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+            
+            <div class="form-group">
+                <label>Gno</label>
+                <input type="text" class="form-control" name="gno" th:value="${guestbookDTO.gno}" readonly>
+            </div>
+
+        </form>
 
         <div class="form-group">
             <label>Title</label>
@@ -43,9 +49,30 @@
             <button type="button" class="btn btn-info">List</button>
         </a>
 
-        <a th:href="@{/guestbook/update(gno = ${guestbookDTO.gno})}" style="text-decoration: none;">
+        <a th:href="@{/guestbook/update(gno = ${guestbookDTO.gno}, page=${pageRequestDTO.page})}" style="text-decoration: none;">
             <button type="button" class="btn btn-primary">Update</button>
         </a>
+
+        <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
+
+        <script th:inline="javascript">
+
+            const form = document.getElementById("deleteForm");
+            const removeBtn = document.getElementById("removeBtn");
+            
+
+            removeBtn.addEventListener("click", () => {
+
+                if(!confirm("삭제하시겠습니까?")) {
+                    return ;
+                }
+
+                form.setAttribute("action", "/guestbook/remove");
+                form.setAttribute("method", "post");
+                form.submit();
+            })
+
+        </script>
 
     </th:block>
 

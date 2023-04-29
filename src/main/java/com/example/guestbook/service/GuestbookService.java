@@ -15,6 +15,8 @@ public interface GuestbookService {
 
     void update(GuestbookDTO guestbookDTO);
 
+    void remove(Long gno);
+
     default Guestbook dtoToEntity(GuestbookDTO guestbookDTO) {
         
         Guestbook guestbook = Guestbook.builder()
